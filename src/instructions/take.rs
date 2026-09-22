@@ -31,7 +31,7 @@ pub fn process_take_instruction(accounts: &mut [AccountView], data: &[u8]) -> Pr
         None,
         &crate::ID.to_bytes(),
     );
-    if expected_escrow != *escrow_account.address() {
+    if expected_escrow != &*escrow_account.address()[..] {
         return Err(ProgramError::InvalidSeeds);
     }
 
