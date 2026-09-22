@@ -5,7 +5,7 @@ use crate::state::Escrow;
 pub fn process_cancel_instruction(accounts: &mut [AccountView], data: &[u8]) -> ProgramResult {
     if !data.is_empty() { return Err(ProgramError::InvalidInstructionData); }
 
-    let [maker, mint_a, escrow_account, vault, maker_ata_a, token_program] = accounts else {
+    let [maker, mint_a, escrow_account, vault, maker_ata_a, _token_program] = accounts else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };
 
@@ -25,7 +25,7 @@ pub fn process_cancel_instruction(accounts: &mut [AccountView], data: &[u8]) -> 
         None,
         &crate::ID.to_bytes(),
     );
-    if expected_escrow != &*escrow_account.address()[..] {
+    if expected_escrow != *escrow_account.address().as_array() {
         return Err(ProgramError::InvalidSeeds);
     }
 
